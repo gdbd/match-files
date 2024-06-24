@@ -11,7 +11,7 @@ nconf.argv().env();
 const dirs = nconf.get('dir');
 const verbose = nconf.get('verbose');
 
-if (dirs.length !== 2) {
+if (dirs?.length !== 2) {
   console.error('two paths required as arguments');
 } else {
   console.log('--'.repeat(30));
