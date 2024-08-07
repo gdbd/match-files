@@ -29,10 +29,13 @@ if (dirs?.length !== 2) {
         .map(x => x.trim())
         .filter(x => !!x);
 
+    const knownNames = config.knownNames.map(x => ({ file: x, splits: splitAll(x), knownName: true }));
+
     recursive(dir2, [], (_, files2) => {
       const splitsDir2 = files2.map(x => ({
         file: path.basename(x),
         splits: splitAll(path.parse(x).name),
+        knownName: false,
       }));
 
       recursive(dir1, [], (_, files) => {
@@ -44,10 +47,12 @@ if (dirs?.length !== 2) {
 
           const splitsDir1 = splitAll(fileName);
 
-          splitsDir2.forEach(({ file, splits }) => {
+          const splitsAll = [...knownNames, ...splitsDir2];
+
+          splitsAll.forEach(({ file, splits, knownName }) => {
             const intersections = splits
               .filter(m => splitsDir1.includes(m))
-              .filter(x => !config.excludeNameParts.find(y => y.toLowerCase() === x.toLowerCase()))
+              .filter(x => !config.ignoreNameParts.find(y => y.toLowerCase() === x.toLowerCase()))
               .filter(x => x.length > 1);
 
             if (intersections.length > 2) {
@@ -63,7 +68,7 @@ if (dirs?.length !== 2) {
                 found = found.replace(i, i.yellow);
               });
 
-              console.log('match'.green, found);
+              console.log(knownName ? 'lib'.blue : 'match'.green, found, );
 
               console.log();
               console.log();

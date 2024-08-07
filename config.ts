@@ -1,7 +1,9 @@
 type TConfig = {
-  readonly excludeNameParts: readonly string[];
+  readonly ignoreNameParts: readonly string[];
+  readonly knownNames: readonly string[];
 };
 
 export default {
-  excludeNameParts: [],
+  ignoreNameParts: [],
+  knownNames: [],
 } as TConfig;
